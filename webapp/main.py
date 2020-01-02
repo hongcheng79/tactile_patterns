@@ -9,16 +9,17 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 
 from ml.utils import Utils
 
-
 app = Flask(__name__)
 csrf = CSRFProtect(app)
 babel = Babel(app)
+
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
-app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10MB max for file upload
+app.config["MAX_CONTENT_LENGTH"] = int(os.environ.get("MAX_CONTENT_LENGTH", 10)) * \
+                                   1024 * 1024  # 10MB max (default) for file upload
+
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(level=logging.DEBUG)
-
 
 @babel.localeselector
 def get_locale():
